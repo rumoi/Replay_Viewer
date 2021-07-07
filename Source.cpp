@@ -54,8 +54,9 @@ struct vec2 {
 
 int main(const int c, char** d) {
 
-	if (c != 2)
+	if (c != 2) {
 		return 0;
+	}
 
 	const auto replay_data{ load_replay_from_file(d[1])};
 	

@@ -7,7 +7,7 @@ auto calc_frame_average(const _replay& replay, const void* beatmap){
 	const auto is_invalid_frame = [&replay](const size_t i)->bool{
 
 		#define KEY_UPDATE(x)(\
-					replay.frame[i x].keys != replay.frame[i x].p_keys &&\
+					replay.frame[i x].keys != replay.frame[i x].p_keys ||\
 					replay.frame[i x].smoke_held != replay.frame[i x].p_smoke_held\
 				)
 
@@ -72,7 +72,7 @@ auto calc_frame_average(const _replay& replay, const void* beatmap){
 						   this_frame{ frame_check[i] };
 
 		// Ignore all frames that are not pairs.
-		if (frame_check[i - 1u].frame_id + 1 != this_frame.frame_id)
+		if (last_frame.frame_id + 1 != this_frame.frame_id)
 			continue;
 
 		const u16 delay{ static_cast<u16>(last_frame.delay + this_frame.delay) };
@@ -82,7 +82,7 @@ auto calc_frame_average(const _replay& replay, const void* beatmap){
 
 		++i;
 		// I have not done extensive testing on this; but I assume the rolling average of triplets
-		// would be produce less desirable results.		
+		// would produce less desirable results.		
 	}
 	
 	const u16 most_average_ms{
