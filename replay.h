@@ -90,11 +90,11 @@ struct _replay_header {
 void* __lzma_alloc(ISzAllocPtr, size_t size) { return new u8[size];}
 void __lzma_free(ISzAllocPtr, void* p) { if (p) delete[] (u8*)p;}
 
-std::vector<u8> lzma_decompress(const uint8_t* input, uint32_t inputSize) {
+std::vector<u8> lzma_decompress(const uint8_t* input, uint32_t input_size) {
 
 	constexpr auto p_size{ LZMA_PROPS_SIZE + 8 };
 
-	if (inputSize < p_size)
+	if (input_size < p_size)
 		return {};
 
 	size_t size{};
@@ -107,7 +107,7 @@ std::vector<u8> lzma_decompress(const uint8_t* input, uint32_t inputSize) {
 		std::vector<u8> ret(size);
 
 		ELzmaStatus lzma_status{};
-		size_t decomp_size{ size }, comp_size{ inputSize - p_size };
+		size_t decomp_size{ size }, comp_size{ input_size - p_size };
 
 		constexpr ISzAlloc _lzma_alloc{ __lzma_alloc, __lzma_free };
 

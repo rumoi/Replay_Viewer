@@ -22,9 +22,17 @@ auto calc_frame_average(const _replay& replay, const void* beatmap){
 	};
 
 	struct _frame_average {
+
 		u32 counted_frames;
 		float model_average;// The 'ideal' average
 		float average;
+
+		void print() const noexcept{
+			printf("%fms - %f | frame pairs: %i",
+				average, average / model_average, counted_frames
+			);
+		}
+
 	} ret{};
 
 	ret.model_average = REPLAY_FRAME_TARGET * replay.get_play_factor();
@@ -77,7 +85,7 @@ auto calc_frame_average(const _replay& replay, const void* beatmap){
 
 		const u16 delay{ static_cast<u16>(last_frame.delay + this_frame.delay) };
 
-		++frame_freq[delay & 0x7f];
+		++frame_freq[delay & 0x7fu];
 		delay_buffer.push_back(delay);
 
 		++i;

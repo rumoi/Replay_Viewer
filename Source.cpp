@@ -3,6 +3,7 @@
 #include <vector>
 #include <fstream>
 #include <algorithm>
+#include <iostream>
 
 #include <charconv>
 #define from_char_sv(sv, v) {std::from_chars(sv.data(), sv.data() + sv.size(), v);}
@@ -52,17 +53,42 @@ struct vec2 {
 #include "replay.h"
 #include "frame_average.h"
 
+#include <filesystem>
+#include <string>
+
+void run_test_folder() {
+
+	for (const auto& file_entry : std::filesystem::directory_iterator("test/")) {
+
+		const auto _p{ file_entry.path().native() };
+
+		const auto file_name{ std::string(_p.begin(), _p.end()) };
+
+		if (file_name.find(".osr") == std::string::npos)
+			continue;
+
+		const auto replay_data{ load_replay_from_file(file_name.c_str()) };
+
+		(calc_frame_average(replay_data, 0).print());
+		printf(" > %s\n", file_name.c_str());
+
+	}
+
+}
+
 int main(const int c, char** d) {
 
 	if (c != 2) {
+		run_test_folder();
 		return 0;
 	}
 
 	const auto replay_data{ load_replay_from_file(d[1])};
 	
 	const auto frame_time_data{ calc_frame_average(replay_data, 0) };
+	
+	frame_time_data.print();
 
-	printf("%fms | %fms (%i frame pairs)", frame_time_data.average, frame_time_data.model_average, frame_time_data.counted_frames);
 
 	return 0;
 }
