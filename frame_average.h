@@ -1,6 +1,6 @@
 #pragma once
 
-constexpr int FREQ_RANGE{ 5 };//
+constexpr int FREQ_RANGE{ 6 };//
 
 auto calc_frame_average(const _replay& replay, const void* beatmap){
 
@@ -115,7 +115,7 @@ auto calc_frame_average(const _replay& replay, const void* beatmap){
 
 		}
 
-		ret.average = final_sum / double(ret.counted_frames);
+		ret.average = ret.counted_frames ? final_sum / double(ret.counted_frames) : 0.f;
 
 	}
 
