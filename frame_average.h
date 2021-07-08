@@ -70,12 +70,14 @@ auto calc_frame_average(const _replay& replay, const void* beatmap){
 			frame_check.push_back(_frame_check{ static_cast<u32>(i), delay });
 	}
 
+	if (frame_check.size() <= 2)
+		return ret;
+
 	std::vector<u16> delay_buffer; delay_buffer.reserve(frame_check.size() >> 1);
 
 	u16 frame_freq[128]{};// Could be a map, but this is probably good enough
 
 	for (size_t i{ 1 }, frame_count{ frame_check.size() - 2 }; i < frame_count; ++i) {
-
 		const _frame_check last_frame{ frame_check[i - 1u] },
 						   this_frame{ frame_check[i] };
 
